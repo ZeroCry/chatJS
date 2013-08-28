@@ -115,7 +115,7 @@ $(function (e, t){
 		this.nickname = nickname;
 	}
 
-	var socket = io.connect('http://127.0.0.1:9000');
+	var socket = io.connect();
 	var user = prompt('Please enter your name: ');
 
 	//Create the chat

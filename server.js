@@ -1,22 +1,42 @@
 var http = require('http').createServer(handler);
 var io = require('socket.io').listen(http, { log: false });
 var fs = require('fs');
+var url = require("url");
+var path = require("path");
+
+//Server handler - Serve Files
+function handler(request, response){
+	var uri = url.parse(request.url).pathname,
+		filename = path.join(process.cwd(), uri);
+
+	path.exists(filename, function(exists) {
+		if(!exists) {
+			response.writeHead(404, {"Content-Type": "text/plain"});
+			response.write("404 Not Found\n");
+			response.end();
+
+			return;
+		}
+
+		if (fs.statSync(filename).isDirectory()) filename += 'index.html';
+
+		fs.readFile(filename, "binary", function(err, file) {
+			if(err) {        
+				response.writeHead(500, {"Content-Type": "text/plain"});
+				response.write(err + "\n");
+				response.end();
+				return;
+			}
+
+			response.writeHead(200);
+			response.write(file, "binary");
+			response.end();
+		});
+	});
+}
+
 
 http.listen('9000');
-
-//Server handler
-function handler(req, res){
-	fs.readFile('../index.html',
-		function (err, data) {
-		    if (err) {
-				res.writeHead(500);
-				return res.end('Error loading index.html');
-		    }
-
-		    res.writeHead(200);
-		    res.end(data);
-	  	});
-}
 
 //Player List
 var users = {};
