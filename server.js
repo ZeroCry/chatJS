@@ -1,8 +1,9 @@
-var http = require('http').createServer(handler);
-var io = require('socket.io').listen(http, { log: false });
-var fs = require('fs');
-var url = require("url");
-var path = require("path");
+var http = require('http').createServer(handler),
+	io = require('socket.io').listen(http, { log: false }),
+	fs = require('fs'),
+	url = require("url"),
+	path = require("path"),
+	port = 9000;
 
 //Server handler - Serve Files
 function handler(request, response){
@@ -25,6 +26,7 @@ function handler(request, response){
 				response.writeHead(500, {"Content-Type": "text/plain"});
 				response.write(err + "\n");
 				response.end();
+
 				return;
 			}
 
@@ -35,16 +37,16 @@ function handler(request, response){
 	});
 }
 
+//Start listening to the port
+http.listen(port);
 
-http.listen('9000');
-
-//Player List
+//User List
 var users = {};
 
 io.sockets.on('connection', function(socket){
 	//Detect socket when you connect
 	socket.on('connect', function(data){
-		//Save player on the Array
+		//Save user on the Array
 		users[data.nickname] = new chatUser(data.nickname, socket.id);
 
 		//Send broadcast of connection
@@ -53,7 +55,7 @@ io.sockets.on('connection', function(socket){
 		log('Connecting: ' + data.nickname);
 	});
 
-	//send message trough sockets
+	//Send message trough sockets
 	socket.on('emit_message', function(data){
 		log(data.nickname + ': ' + data.message);
 
@@ -70,6 +72,7 @@ io.sockets.on('connection', function(socket){
 				//Send broadcast of disconnection
 				socket.broadcast.emit('user_disconnect', {'nickname' : users[key].nickname});
 
+				//Remove the user from the Array
 				delete users[key];
 			}
 		}
@@ -82,6 +85,7 @@ function chatUser(nickname, socketId){
 	this.socketId = socketId;
 }
 
+//Log function
 function log(logMessage){
 	console.log(logMessage);
 }
