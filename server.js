@@ -8,13 +8,13 @@ var express = require('express'),
 server.listen(port);
 
 //Directories that would be serve on the server
-app.use("/css", express.static(__dirname + '/css'));
-app.use("/js", express.static(__dirname + '/js'));
-app.use("/img", express.static(__dirname + '/img'));
+app.use("/css", express.static(__dirname + '/webapp/css'));
+app.use("/js", express.static(__dirname + '/webapp/js'));
+app.use("/img", express.static(__dirname + '/webapp/img'));
 
 //Main page of the server
 app.get('/', function (req, res) {
-	res.sendfile(__dirname + '/index.html');
+	res.sendfile(__dirname + '/webapp/index.html');
 });
 
 //Serve 404 - Page not founds
