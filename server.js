@@ -1,44 +1,31 @@
-var http = require('http').createServer(handler),
-	io = require('socket.io').listen(http, { log: false }),
-	fs = require('fs'),
-	url = require("url"),
-	path = require("path"),
+var express = require('express'),
+	app = express(),
+	server = require('http').createServer(app),
+	io = require('socket.io').listen(server, { log: false }),
 	port = 9000;
 
-//Server handler - Serve Files
-function handler(request, response){
-	var uri = url.parse(request.url).pathname,
-		filename = path.join(process.cwd(), uri);
-
-	path.exists(filename, function(exists) {
-		if(!exists) {
-			response.writeHead(404, {"Content-Type": "text/plain"});
-			response.write("404 Not Found\n");
-			response.end();
-
-			return;
-		}
-
-		if (fs.statSync(filename).isDirectory()) filename += 'index.html';
-
-		fs.readFile(filename, "binary", function(err, file) {
-			if(err) {        
-				response.writeHead(500, {"Content-Type": "text/plain"});
-				response.write(err + "\n");
-				response.end();
-
-				return;
-			}
-
-			response.writeHead(200);
-			response.write(file, "binary");
-			response.end();
-		});
-	});
-}
-
 //Start listening to the port
-http.listen(port);
+server.listen(port);
+
+//Directories that would be serve on the server
+app.use("/css", express.static(__dirname + '/css'));
+app.use("/js", express.static(__dirname + '/js'));
+app.use("/img", express.static(__dirname + '/img'));
+
+//Main page of the server
+app.get('/', function (req, res) {
+	res.sendfile(__dirname + '/index.html');
+});
+
+//Serve 404 - Page not founds
+app.get('*', function(req, res){
+  res.send('Page not found - 404', 404);
+});
+
+//If not support websockets
+io.set('transports', [ 'websocket', 'xhr-polling' ]);
+
+log('Server running on port: ' + port);
 
 //User List
 var users = {};
@@ -52,7 +39,7 @@ io.sockets.on('connection', function(socket){
 		//Send broadcast of connection
 		socket.broadcast.emit('user_connect', {'nickname' : data.nickname});
 
-		log('Connecting: ' + data.nickname);
+		log(data.nickname + ' just connect');
 	});
 
 	//Send message trough sockets
