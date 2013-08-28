@@ -1,0 +1,152 @@
+html{
+	 font-family: 'Helvetica Neue', Helvetica, sans-serif;
+	 font-size: 14px;
+}
+
+body{
+	margin: 0px;
+}
+
+#page-container{
+	margin: 0 auto;
+	width: 100%;
+	height: 100%;
+}
+
+#chat-container{
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+}
+
+#input-container{
+	position: fixed;
+	bottom: 0px;
+	height: 30px;
+	left: 0px;
+	right: 0px;
+}
+
+#input-container input{
+	height: 100%;
+	width: 90%;
+}
+
+#input-container button{
+	height: 100%;
+	width: 10%;
+}
+
+#message-container{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 250px;
+	bottom: 30px;
+	padding: 10px;
+	background: url('../img/chat-background.png') repeat transparent;
+	/* background-color: #A8A8A8; */
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.chat{
+	width: 450px;
+	padding-bottom: 10px;
+	min-height: 66px;
+	position: relative;
+	clear: both;
+}
+
+.chat .profilePic{
+	overflow: hidden;
+	border: 3px solid #FFF;
+	width: 60px;
+	height: 60px;
+	-moz-border-radius: 45px;
+	border-radius: 45px;
+}
+
+.chat .profilePic img{
+	width: 60px;
+	height: 60px;
+}
+
+.chat .message{
+	border-radius: 10px;
+	background: #FFF;
+	padding: 10px;
+	color: #444;
+	width: 350px;
+	min-height: 45px;
+	position: relative;
+	word-break: break-word;
+}
+
+.chat.left .message{
+	box-shadow: 0px 0px 6px #B2B2B2;
+	-webkit-box-shadow: 0px 0px 6px #B2B2B2;
+}
+
+.chat.right .message{
+	box-shadow: 0px 0px 6px #B2B2B2;
+	-webkit-box-shadow: 0px 0px 6px #B2B2B2;
+}
+
+.chat .message:before{
+	content: '';
+	position: absolute;
+	width: 0;
+	height: 0;
+}
+
+.chat.left .message:before,
+.chat.right .message:before{
+	top: 20px;
+	border-top: 8px solid transparent;
+	border-bottom: 8px solid transparent;
+}
+
+.chat.left .message:before{
+	left: -8px;
+	border-right: 8px solid #FFF;
+}
+
+.chat.right .message:before{
+	right: -8px;
+	border-left: 8px solid #FFF;
+}
+
+.chat.left .profilePic,
+.chat.right .message{
+	float: left;
+}
+
+.chat.right .profilePic,
+.chat.left .message{
+	float: right;
+}
+
+.chat .message .who{
+	display: block;
+	padding: 0 1px 1px 0;
+	font-weight: bold;
+}
+
+.chat .message .text{
+	display: block;
+}
+
+.right,
+.left{
+	/*position: relative;*/
+}
+
+.right{
+	float: right;
+}
+
+.left{
+	float:left;
+}
