@@ -1,1 +1,1 @@
-<h1>Chat with NodeJS and Socket.IO</h1>
+<h1>Chat - NodeJS + Socket.IO + Express</h1>
