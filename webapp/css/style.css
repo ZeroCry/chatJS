@@ -11,6 +11,7 @@ body{
 	margin: 0 auto;
 	width: 100%;
 	height: 100%;
+	background: url('../img/chat-background.png') repeat transparent;
 }
 
 #chat-container{
@@ -21,7 +22,7 @@ body{
 }
 
 #input-container{
-	position: fixed;
+	position: absolute;
 	bottom: 0px;
 	height: 30px;
 	left: 0px;
@@ -29,13 +30,19 @@ body{
 }
 
 #input-container input{
-	height: 100%;
-	width: 90%;
+	position: absolute;
+	height: 30px;
+	padding-left: 10px;
+	padding-right: 10px;
+	left: 0px;
+	right: 80px;
 }
 
 #input-container button{
-	height: 100%;
-	width: 10%;
+	position: absolute;
+	right: 0px;
+	width: 80px;
+	height: 30px;
 }
 
 #message-container{
@@ -45,8 +52,7 @@ body{
 	right: 250px;
 	bottom: 30px;
 	padding: 10px;
-	background: url('../img/chat-background.png') repeat transparent;
-	/* background-color: #A8A8A8; */
+	/* background: url('../img/chat-background.png') repeat transparent; */
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
