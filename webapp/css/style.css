@@ -45,6 +45,65 @@ body{
 	height: 30px;
 }
 
+#users-container{
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	width: 250px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+#users-container ul{
+	position: absolute;
+	width: 190px;
+	height: auto;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	left: 12px;
+	top: 10px;
+}
+
+#users-container ul li{
+	width: 100%;
+	height: auto;
+	cursor: pointer;
+	background-color: rgb(231, 231, 231);
+	margin: 0px;
+	margin-bottom: 10px;
+	padding: 0px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+#users-container ul li p{
+	vertical-align: middle;
+	display: inline;
+	font-weight: bold;
+	font-size: 13px;
+	line-height: 48px;
+	margin: 0;
+	padding: 0px 0px 0px 10px;
+	text-shadow: 0 1px 1px rgba(255,255,255,0.6);
+}
+
+#users-container ul li img{
+	vertical-align: middle;
+	display: inline;
+	overflow: hidden;
+	border: 1px solid #FFF;
+	width: 35px;
+	height: 35px;
+	-moz-border-radius: 45px;
+	border-radius: 45px;
+}
+
 #message-container{
 	position: absolute;
 	top: 0px;

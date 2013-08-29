@@ -30,6 +30,18 @@ $(function (e, t){
 			var message =  data.nickname + ' is connected';
 
 			_this.notifications(message, 3);
+
+			_this.addUserToList(data.nickname);
+		});
+
+		//Detect a user connection
+		_this.socket.on('user_list', function(data){
+			for (key in data){
+				if( !(_this.users[key]) && (_this.user.nickname != key) ){
+					_this.users[key] = new chatUser(key);
+					_this.addUserToList(key);
+				}
+			}
 		});
 
 		//Detect a user disconnection
@@ -39,6 +51,8 @@ $(function (e, t){
 			var message =  data.nickname + ' just disconnect';
 
 			_this.notifications(message, 3);
+
+			_this.removeFromList(data.nickname);
 		});
 
 		//Detect server disconnection
@@ -74,6 +88,14 @@ $(function (e, t){
 		_this.socket.on('user_message', function(data){
 			_this.recieveMessage(data.nickname, data.message);
 		});
+	}
+
+	chat.prototype.addUserToList = function(user){
+		$('#users-container ul').append('<li user="' + user + '"><img src="img/unknown.png"></img><p>' + user + '</p></li>');
+	}
+
+	chat.prototype.removeFromList = function(user){
+		$('#users-container ul li[user=' + user + ']').remove();
 	}
 
 	chat.prototype.notifications = function(message, type){

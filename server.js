@@ -40,6 +40,7 @@ io.sockets.on('connection', function(socket){
 			//Send broadcast of connection
 			socket.broadcast.emit('user_connect', {'nickname' : data.nickname});
 			socket.emit('connect_success', {'nickname' : data.nickname});
+			socket.emit('user_list', getUsersOnline());
 
 			log(data.nickname + ' just connect');
 		}else{
@@ -49,11 +50,6 @@ io.sockets.on('connection', function(socket){
 
 			log(data.nickname + ' is already used');
 		}
-	});
-
-	//Reconnect
-	socket.on('reconnect', function(data){
-
 	});
 
 	//Send message trough sockets
@@ -79,6 +75,16 @@ io.sockets.on('connection', function(socket){
 		}
 	});
 });
+
+function getUsersOnline(){
+	var usersOnline = {};
+
+	for (key in users){
+		usersOnline[key] = true;
+	}
+
+	return usersOnline
+}
 
 //User Class
 function chatUser(nickname, socketId){
