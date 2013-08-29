@@ -1,15 +1,16 @@
 $(function (e, t){
 
-	function chat(user, socket){
+	function chat(){
 		_this = this;
 
+		//Ask for user name
+		var user = prompt('Please enter your name: ');
+
 		//Variables
-		_this.socket = socket;
+		_this.socket = io.connect();
 		this.user = new chatUser(user);
 		this.users = {};
-
-		//Emit Connection
-		this.emmitConnection();
+		this.logIn = false;
 
 		//Bindings
 		this.bindEvents();
@@ -17,6 +18,12 @@ $(function (e, t){
 	}
 
 	chat.prototype.socketEvents = function(){
+		//Emmit Connection
+		_this.socket.on('connect', function(data){
+	        _this.emmitConnection();
+	    });
+
+		//Detect a user connection
 		_this.socket.on('user_connect', function(data){
 			_this.users[data.nickname] = new chatUser(data.nickname);
 
@@ -25,12 +32,43 @@ $(function (e, t){
 			_this.notifications(message, 3);
 		});
 
+		//Detect a user disconnection
 		_this.socket.on('user_disconnect', function(data){
 			delete _this.users[data.nickname];
 
 			var message =  data.nickname + ' just disconnect';
 
 			_this.notifications(message, 3);
+		});
+
+		//Detect server disconnection
+		_this.socket.on('disconnect', function(data){
+			if( _this.logIn ){
+				var message =  'The server is down';
+
+				_this.notifications(message, 3);
+
+				_this.socket.socket.reconnect();
+			}
+		});
+
+		//Log if user is connected successfully
+		_this.socket.on('connect_success', function(data){
+			var message =  'You are online';
+
+			_this.notifications(message, 3);
+
+			_this.logIn = true;
+		});
+
+		//Detect user forced to disconnect
+		_this.socket.on('already_exist', function(data){
+			alert('User already logged');
+
+			var user = prompt('Please enter your name: ');
+
+			_this.user.nickname = user;
+			_this.socket.socket.reconnect();
 		});
 
 		_this.socket.on('user_message', function(data){
@@ -135,11 +173,8 @@ $(function (e, t){
 		this.nickname = nickname;
 	}
 
-	var socket = io.connect();
-	var user = prompt('Please enter your name: ');
-
 	//Create the chat
-	var chat = new chat(user, socket);
+	var chat = new chat();
 
 	window.chat = chat;
 });

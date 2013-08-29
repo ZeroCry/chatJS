@@ -33,13 +33,27 @@ var users = {};
 io.sockets.on('connection', function(socket){
 	//Detect socket when you connect
 	socket.on('connect', function(data){
-		//Save user on the Array
-		users[data.nickname] = new chatUser(data.nickname, socket.id);
+		if( !users[data.nickname] ){
+			//Save user on the Array
+			users[data.nickname] = new chatUser(data.nickname, socket.id);
 
-		//Send broadcast of connection
-		socket.broadcast.emit('user_connect', {'nickname' : data.nickname});
+			//Send broadcast of connection
+			socket.broadcast.emit('user_connect', {'nickname' : data.nickname});
+			socket.emit('connect_success', {'nickname' : data.nickname});
 
-		log(data.nickname + ' just connect');
+			log(data.nickname + ' just connect');
+		}else{
+			//If user with same nickname connected, disconnect
+			socket.emit('already_exist', {'nickname' : data.nickname});
+			socket.disconnect();
+
+			log(data.nickname + ' is already used');
+		}
+	});
+
+	//Reconnect
+	socket.on('reconnect', function(data){
+
 	});
 
 	//Send message trough sockets
