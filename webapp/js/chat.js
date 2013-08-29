@@ -13,27 +13,70 @@ $(function (e, t){
 
 		//Bindings
 		this.bindEvents();
-		this.userConnect();
-		this.messageRecieve();
+		this.socketEvents();
 	}
 
-	chat.prototype.emmitMessage = function(nickname, message){
-		_this.socket.emit('emit_message', { 'nickname' : nickname, 'message' : message });
+	chat.prototype.socketEvents = function(){
+		_this.socket.on('user_connect', function(data){
+			_this.users[data.nickname] = new chatUser(data.nickname);
+
+			var message =  data.nickname + ' is connected';
+
+			_this.notifications(message, 3);
+		});
+
+		_this.socket.on('user_disconnect', function(data){
+			delete _this.users[data.nickname];
+
+			var message =  data.nickname + ' just disconnect';
+
+			_this.notifications(message, 3);
+		});
+
+		_this.socket.on('user_message', function(data){
+			_this.recieveMessage(data.nickname, data.message);
+		});
+	}
+
+	chat.prototype.notifications = function(message, type){
+		$('#chat-container #notification-center').append('<div class="tn-box tn-box-color-' + type + '"><p>' + message + '</p><div class="tn-progress"></div></div>');
+
+		$('.tn-box').last().addClass('play');
+
+		//Append Event when finish
+	    $('.tn-box').last().one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
+		    $(this).remove();
+	    });
 	}
 
 	chat.prototype.emmitConnection = function(){
 		_this.socket.emit('connect', { 'nickname' : _this.user.nickname });
 	}
 
-	chat.prototype.userConnect = function(){
-		_this.socket.on('user_connect', function(data){
-			_this.users[data.nickname] = new chatUser(data.nickname);
-		});
+	chat.prototype.emmitMessage = function(nickname, message){
+		_this.socket.emit('emit_message', { 'nickname' : nickname, 'message' : message });
 	}
 
-	chat.prototype.messageRecieve = function(){
-		_this.socket.on('user_message', function(data){
-			_this.recieveMessage(data.nickname, data.message);
+	chat.prototype.bindEvents = function(){
+		$('#input-container input').focusin(function(event) {
+			$('#input-container input').addClass('haveFocus');
+		});
+
+		$('#input-container input').focusout(function(event) {
+			$('#input-container input').removeClass('haveFocus');
+		});
+
+		$(window).keydown(function(event){
+			if( (event.keyCode == 13) && ($('#input-container input').hasClass('haveFocus')) ){
+				event.preventDefault();
+
+				_this.sendMessage();
+			}
+		})
+
+		//Button Event to send the message
+		$('#input-container button').click(function(){
+			_this.sendMessage();
 		});
 	}
 
@@ -58,29 +101,6 @@ $(function (e, t){
 		if( !(messageOnUI) ){
 			$('#message-container').append('<div class="chat ' + side + '" user="' + user + '"><div class="profilePic"><img src="img/unknown.png"/></div><div class="message"><span class="who">' + user + ':</span><span class="text">' + message + '</span></div></div>');
 		}
-	}
-
-	chat.prototype.bindEvents = function(){
-		$('#input-container input').focusin(function(event) {
-			$('#input-container input').addClass('haveFocus');
-		});
-
-		$('#input-container input').focusout(function(event) {
-			$('#input-container input').removeClass('haveFocus');
-		});
-
-		$(window).keydown(function(event){
-			if( (event.keyCode == 13) && ($('#input-container input').hasClass('haveFocus')) ){
-				event.preventDefault();
-
-				_this.sendMessage();
-			}
-		})
-
-		//Button Event to send the message
-		$('#input-container button').click(function(){
-			_this.sendMessage();
-		});
 	}
 
 	chat.prototype.sendMessage = function(){
@@ -120,4 +140,6 @@ $(function (e, t){
 
 	//Create the chat
 	var chat = new chat(user, socket);
+
+	window.chat = chat;
 });

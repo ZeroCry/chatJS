@@ -138,15 +138,132 @@ body{
 	display: block;
 }
 
-.right,
-.left{
-	/*position: relative;*/
-}
-
 .right{
 	float: right;
 }
 
 .left{
 	float:left;
+}
+
+/* ----------- Notifications ------------ */
+#notification-center{
+	position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 20;
+}
+
+.tn-box {
+    width: 250px;
+    position: relative;
+    margin: 0 auto 0px auto;
+    padding: 10px 15px;
+    text-align: left;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+    opacity: 0;
+    cursor: default;
+    display: none;
+    margin-bottom: 15px;
+}
+
+.tn-box p {
+	font-weight: bold;
+	font-size: 14px;
+	line-height: 18px;
+	margin: 0;
+	padding: 0px 0px 10px 60px;
+	text-shadow: 0 1px 1px rgba(255,255,255,0.6);
+}
+
+.tn-box p:before{
+	text-align: center;
+	border: 2px solid rgba(255, 255, 255, 1);
+	margin-top: -3px;
+	left: 20px;
+	width: 20px;
+	content: 'i';
+	font-size: 20px;
+	color: rgba(255, 255, 255, 1);
+	position: absolute;
+	height: 20px;
+	line-height: 20px;
+	border-radius: 50%;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+}
+ 
+.tn-box-color-1{
+	background: #ffe691;
+	border: 1px solid #f6db7b;
+}
+.tn-box-color-1 p {
+	color: #7d5912;
+}
+
+.tn-box-color-2{
+	background: #99ffb1;
+	border: 1px solid #7ce294;
+}
+.tn-box-color-2 p {
+	color: #2d8241;
+}
+
+.tn-box-color-3{
+	background: #99DAFF;
+	border: 1px solid #7CB9E2;
+}
+.tn-box-color-3 p {
+	color: #2D7F82;
+}
+
+.tn-progress {
+    width: 0;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    position: absolute;
+    bottom: 5px;
+    left: 2%;
+    border-radius: 3px;
+}
+
+.tn-box.play {
+    display: block;
+    animation: fadeOut 8s linear forwards;
+    -webkit-animation: fadeOut 8s linear forwards;
+}
+ 
+.tn-box.play .tn-progress {
+    animation: runProgress 7s linear forwards 0.5s;
+    -webkit-animation: runProgress 7s linear forwards 0.5s;
+}
+
+@keyframes fadeOut {
+    0%  { opacity: 0; }
+    10% { opacity: 1; }
+    80% { opacity: 1; transform: translateY(0px);}
+    90% { opacity: 0; transform: translateY(-30px);}
+    100% { opacity: 0; }
+}
+
+@-webkit-keyframes fadeOut{
+    0%  { opacity: 0; }
+    10% { opacity: 1; }
+    80% { opacity: 1; transform: translateY(0px);}
+    90% { opacity: 0; transform: translateY(-30px);}
+    100% { opacity: 0; }
+}
+
+@keyframes runProgress {
+    0%  { width: 0%; background: rgba(255,255,255,0.3); }
+    90% { width: 96%; background: rgba(255,255,255,1); }
+    100% { width: 96%; background: rgba(255,255,255,1); }
+}
+
+@-webkit-keyframes runProgress{
+    0%  { width: 0%; background: rgba(255,255,255,0.3); }
+    90% { width: 96%; background: rgba(255,255,255,1); }
+    100% { width: 96%; background: rgba(255,255,255,1); }
 }
